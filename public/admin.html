@@ -68,14 +68,14 @@
             </div>
             <div class="field">
               <label for="admin-dataNascimento">Data de Nascimento <span class="req" aria-hidden="true">*</span></label>
-              <input id="admin-dataNascimento" type="date" name="dataNascimento" autocomplete="bday" required />
+              <input id="admin-dataNascimento" type="date" name="dataNascimento" autocomplete="bday" min="1900-01-01" required />
             </div>
           </div>
 
           <div class="row">
             <div class="field">
               <label for="admin-email">E-mail <span class="req" aria-hidden="true">*</span></label>
-              <input id="admin-email" type="email" name="email" autocomplete="email" required />
+              <input id="admin-email" type="email" name="email" autocomplete="email" pattern="[^\s@]+@[^\s@]+\.[A-Za-z]{2,63}" required />
             </div>
             <div class="field">
               <label for="admin-celular">Celular / WhatsApp <span class="req" aria-hidden="true">*</span></label>
@@ -102,7 +102,7 @@
             </div>
             <div class="field">
               <label for="admin-numero">Número <span class="req" aria-hidden="true">*</span></label>
-              <input id="admin-numero" type="text" name="numero" autocomplete="address-line2" required />
+              <input id="admin-numero" type="text" name="numero" autocomplete="address-line2" inputmode="numeric" pattern="[0-9]+" maxlength="20" required />
             </div>
           </div>
 

@@ -29,11 +29,16 @@ function maskCEP(v) {
   return v;
 }
 
+function maskNumero(v) {
+  return (v || '').replace(/\D/g, '').slice(0, 20);
+}
+
 const MASCARAS = {
   cpf: maskCPF,
   rg: maskRG,
   celular: maskTelefone,
   cep: maskCEP,
+  numero: maskNumero,
 };
 
 function attachMasks(root) {
@@ -95,6 +100,17 @@ async function buscarCep(cep, form) {
   } finally {
     if (cepInput) delete cepInput.dataset.loading;
   }
+}
+
+function configurarDataNascimento(form) {
+  const campo = form.elements.dataNascimento;
+  if (!campo) return;
+  const hoje = new Date();
+  const ano = hoje.getFullYear() - 18;
+  const mes = hoje.getMonth() + 1;
+  const ultimoDiaDoMes = new Date(ano, mes, 0).getDate();
+  const dia = Math.min(hoje.getDate(), ultimoDiaDoMes);
+  campo.max = `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
 }
 
 function attachCepLookup(form) {

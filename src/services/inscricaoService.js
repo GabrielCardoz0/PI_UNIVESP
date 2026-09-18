@@ -7,6 +7,18 @@ const ESTADOS_VALIDOS = new Set([
   'RS', 'RO', 'RR', 'SC', 'SP', 'SE', 'TO', 'EX',
 ]);
 
+const DATA_NASCIMENTO_MINIMA = '1900-01-01';
+const EMAIL_VALIDO = /^[^\s@]+@(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,63}$/i;
+
+function dataMaximaParaMaioridade() {
+  const hoje = new Date();
+  const ano = hoje.getFullYear() - 18;
+  const mes = hoje.getMonth() + 1;
+  const ultimoDiaDoMes = new Date(ano, mes, 0).getDate();
+  const dia = Math.min(hoje.getDate(), ultimoDiaDoMes);
+  return `${ano}-${String(mes).padStart(2, '0')}-${String(dia).padStart(2, '0')}`;
+}
+
 class ValidationError extends Error {
   constructor(erros) {
     super('Validação falhou');
@@ -56,11 +68,15 @@ function normalizar(data, { exigirAceites }) {
     out[campo] = v;
   }
 
+  if (out.numero && !/^\d+$/.test(out.numero)) {
+    erros.push('Número do endereço deve conter somente algarismos.');
+  }
+
   const complemento = sanitizeString(data.complemento, 120);
   out.complemento = complemento || null;
 
   const email = sanitizeString(data.email, 200).toLowerCase();
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+  if (!email || !EMAIL_VALIDO.test(email)) {
     erros.push('E-mail inválido.');
   }
   out.email = email;
@@ -72,9 +88,18 @@ function normalizar(data, { exigirAceites }) {
   if (!data.dataNascimento) {
     erros.push('Data de nascimento é obrigatória.');
   } else {
-    const d = new Date(data.dataNascimento);
-    if (isNaN(d.getTime())) erros.push('Data de nascimento inválida.');
-    else out.dataNascimento = d;
+    const dataNascimento = sanitizeString(data.dataNascimento, 10);
+    const d = new Date(`${dataNascimento}T00:00:00.000Z`);
+    const dataValida = /^\d{4}-\d{2}-\d{2}$/.test(dataNascimento)
+      && !isNaN(d.getTime())
+      && d.toISOString().slice(0, 10) === dataNascimento;
+
+    if (!dataValida) erros.push('Data de nascimento inválida.');
+    else if (dataNascimento < DATA_NASCIMENTO_MINIMA) {
+      erros.push('Data de nascimento não pode ser anterior a 01/01/1900.');
+    } else if (dataNascimento > dataMaximaParaMaioridade()) {
+      erros.push('Data de nascimento inválida: é necessário ter pelo menos 18 anos.');
+    } else out.dataNascimento = d;
   }
 
   if ('aceiteLgpd' in data) out.aceiteLgpd = !!data.aceiteLgpd;

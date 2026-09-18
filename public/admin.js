@@ -97,6 +97,18 @@ function marcarErroCampo(campo, texto) {
 function mensagemValidacao(campo) {
   const nome = nomesCampos[campo.name] || 'este campo';
   if (campo.validity.valueMissing) return `Preencha o campo “${nome}”.`;
+  if (campo.name === 'dataNascimento' && campo.validity.rangeUnderflow) {
+    return 'A data de nascimento não pode ser anterior a 01/01/1900.';
+  }
+  if (campo.name === 'dataNascimento' && campo.validity.rangeOverflow) {
+    return 'A pessoa inscrita deve ter pelo menos 18 anos.';
+  }
+  if (campo.name === 'email' && campo.validity.patternMismatch) {
+    return 'Informe um e-mail completo, incluindo o domínio (ex.: nome@exemplo.com).';
+  }
+  if (campo.name === 'numero' && campo.validity.patternMismatch) {
+    return 'Informe somente algarismos no campo “Número”.';
+  }
   if (campo.validity.typeMismatch) return `Informe um valor válido no campo “${nome}”.`;
   return `Revise o campo “${nome}”.`;
 }
@@ -423,6 +435,7 @@ form.addEventListener('submit', async (e) => {
 
 attachMasks(form);
 attachCepLookup(form);
+configurarDataNascimento(form);
 carregarSessao().then((autenticado) => {
   if (autenticado) carregarLista();
 });

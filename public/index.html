@@ -54,14 +54,14 @@
             </div>
             <div class="field">
               <label for="dataNascimento">Data de Nascimento <span class="req" aria-hidden="true">*</span></label>
-              <input id="dataNascimento" type="date" name="dataNascimento" autocomplete="bday" required />
+              <input id="dataNascimento" type="date" name="dataNascimento" autocomplete="bday" min="1900-01-01" required />
             </div>
           </div>
 
           <div class="row">
             <div class="field">
               <label for="email">E-mail <span class="req" aria-hidden="true">*</span></label>
-              <input id="email" type="email" name="email" autocomplete="email" placeholder="voce@exemplo.com" required />
+              <input id="email" type="email" name="email" autocomplete="email" placeholder="voce@exemplo.com" pattern="[^\s@]+@[^\s@]+\.[A-Za-z]{2,63}" required />
             </div>
             <div class="field">
               <label for="celular">Celular / WhatsApp <span class="req" aria-hidden="true">*</span></label>
@@ -88,7 +88,7 @@
             </div>
             <div class="field">
               <label for="numero">Número <span class="req" aria-hidden="true">*</span></label>
-              <input id="numero" type="text" name="numero" autocomplete="address-line2" placeholder="123" required />
+              <input id="numero" type="text" name="numero" autocomplete="address-line2" inputmode="numeric" pattern="[0-9]+" maxlength="20" placeholder="123" required />
             </div>
           </div>
 

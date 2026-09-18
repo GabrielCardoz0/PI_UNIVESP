@@ -4,6 +4,7 @@ const btn = document.getElementById('btn-enviar');
 
 attachMasks(form);
 attachCepLookup(form);
+configurarDataNascimento(form);
 
 const nomesCampos = {
   nomeCompleto: 'Nome Completo',
@@ -54,6 +55,18 @@ function mensagemValidacao(campo) {
   if (campo.validity.valueMissing) {
     if (campo.type === 'checkbox') return `Marque “${nome}” para continuar.`;
     return `Preencha o campo “${nome}”.`;
+  }
+  if (campo.name === 'dataNascimento' && campo.validity.rangeUnderflow) {
+    return 'A data de nascimento não pode ser anterior a 01/01/1900.';
+  }
+  if (campo.name === 'dataNascimento' && campo.validity.rangeOverflow) {
+    return 'É necessário ter pelo menos 18 anos para realizar a inscrição.';
+  }
+  if (campo.name === 'email' && campo.validity.patternMismatch) {
+    return 'Informe um e-mail completo, incluindo o domínio (ex.: nome@exemplo.com).';
+  }
+  if (campo.name === 'numero' && campo.validity.patternMismatch) {
+    return 'Informe somente algarismos no campo “Número”.';
   }
   if (campo.validity.typeMismatch) return `Informe um valor válido no campo “${nome}”.`;
   return `Revise o campo “${nome}”.`;
