@@ -1,0 +1,22 @@
+services:
+  amecomex-api:
+    build: .
+    container_name: amecomex-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PORT=3000
+    networks:
+      - traefik
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=traefik"
+      - "traefik.http.routers.amecomex.rule=Host(`amecomex.kumotecnologia.com`)"
+      - "traefik.http.routers.amecomex.entrypoints=websecure"
+      - "traefik.http.routers.amecomex.tls.certresolver=letsencrypt"
+      - "traefik.http.services.amecomex.loadbalancer.server.port=3000"
+
+networks:
+  traefik:
+    external: true
