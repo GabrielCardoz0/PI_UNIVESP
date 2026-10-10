@@ -7,6 +7,9 @@ services:
       - .env
     environment:
       - PORT=3000
+      - DATABASE_URL=file:/data/prod.db
+    volumes:
+      - amecomex-data:/data
     networks:
       - traefik
     labels:
@@ -16,6 +19,9 @@ services:
       - "traefik.http.routers.amecomex.entrypoints=websecure"
       - "traefik.http.routers.amecomex.tls.certresolver=letsencrypt"
       - "traefik.http.services.amecomex.loadbalancer.server.port=3000"
+
+volumes:
+  amecomex-data:
 
 networks:
   traefik:
