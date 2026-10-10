@@ -558,3 +558,11 @@ Sugestões priorizadas para próximas iterações:
 - **Acessibilidade sem biblioteca adicional**: elementos semânticos nativos, CSS e JavaScript existente cobrem os requisitos sem overlay ou framework de componentes.
 - **Diálogo nativo**: `<dialog>` com `showModal()` reduz código manual de foco e mantém o comportamento esperado de teclado.
 - **Contratos do backend preservados**: mensagens existentes da API são associadas aos campos no frontend, evitando mudanças incompatíveis.
+
+## Testes automatizados
+
+- `npm test` executa a suíte (Jest + Supertest); `npm run test:cov` gera o relatório de cobertura (mínimo de 90% imposto em `jest.config.js`).
+- `tests/unit`: serviços, repositórios e loader de `.env` (dependências mockadas).
+- `tests/api`: rotas Express via Supertest (serviços mockados).
+- `tests/integration`: fluxo completo com SQLite real em `prisma/test.db` (recriado a cada execução, ignorado pelo git).
+- `app.js` exporta o app Express; `server.js` apenas carrega o `.env` e chama `listen`.
